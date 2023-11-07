@@ -6,11 +6,14 @@ FROM runpod/base:0.3.1-cuda11.8.0
 # IMPORTANT: The base image overrides the default huggingface cache location.
 
 
-# Optional: System dependencies
-COPY builder/setup.sh /setup.sh
-RUN /bin/bash /setup.sh && \
-rm /setup.sh
+# Install git-lfs
+RUN apt-get update && \
+    apt-get install -y git-lfs && \
+    git lfs install && \
+    rm -rf /var/lib/apt/lists/* 
 
+# Clone Hugging Face repository with Git LFS
+RUN git clone https://huggingface.co/fajw942ghh13/deepblue
 
 # Python dependencies
 COPY builder/requirements.txt /requirements.txt
