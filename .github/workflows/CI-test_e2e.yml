@@ -15,12 +15,6 @@ jobs:
           rm -rf /opt/ghc
           rm -rf "/usr/local/share/boost"
           rm -rf "$AGENT_TOOLSDIRECTORY"
-          
-      - name: Remove Docker images
-        run: docker rmi $(docker images -q)
-
-      - name: Remove Docker volumes
-        run: docker volume rm $(docker volume ls -q)
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
