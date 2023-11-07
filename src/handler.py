@@ -66,7 +66,7 @@ def load_model_config():
     return {"message": "Intimate Server Initialized"}
 
 # If your handler runs inference on a model, load the model here.
-# You will want models to be loaded into memory before starting serverless.
+# You will want models to be loaded into memory before starting serverless
 
 def update_model_parameters(state, initial=False):
     elements = ui.list_model_elements()  # the names of the parameters
