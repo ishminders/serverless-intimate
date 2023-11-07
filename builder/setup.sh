@@ -20,7 +20,7 @@ curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
 python3 get-pip.py
 
 apt-get install git-lfs
-
-git clone https://huggingface.co/fajw942ghh13/grubgaguuga /src/models/grubgaguuga
+git lfs install
+git clone https://huggingface.co/fajw942ghh13/deepblue
 # Clean up, remove unnecessary packages and help reduce image size
 apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
