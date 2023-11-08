@@ -5,16 +5,6 @@ FROM runpod/base:0.3.1-cuda11.8.0
 # Please refer to the base image's Dockerfile for more information before adding additional dependencies.
 # IMPORTANT: The base image overrides the default huggingface cache location.
 
-
-# Install git-lfs
-RUN apt-get update && \
-    apt-get install -y git-lfs && \
-    git lfs install && \
-    rm -rf /var/lib/apt/lists/* 
-
-# Clone Hugging Face repository with Git LFS
-RUN git clone https://huggingface.co/fajw942ghh13/deepblue
-
 # Python dependencies
 COPY builder/requirements.txt /requirements.txt
 RUN python3.11 -m pip install --upgrade pip && \
@@ -24,8 +14,16 @@ RUN python3.11 -m pip install --upgrade pip && \
 # NOTE: The base image comes with multiple Python versions pre-installed.
 #       It is reccommended to specify the version of Python when running your code.
 
-
 # Add src files (Worker Template)
 ADD src .
+
+# Install git-lfs
+RUN apt-get update && \
+    apt-get install -y git-lfs && \
+    git lfs install && \
+    rm -rf /var/lib/apt/lists/* 
+
+# Clone Hugging Face repository with Git LFS
+RUN git clone https://huggingface.co/fajw942ghh13/deepblue /src/models/deepblue
 
 CMD python3.11 -u /handler.py

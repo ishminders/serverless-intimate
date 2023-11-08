@@ -95,7 +95,7 @@ parser.add_argument('--notebook', action='store_true', help='Launch the web UI i
 parser.add_argument('--chat', action='store_true', default=True, help='Launch the web UI in chat mode with a style similar to the Character.AI website.')
 parser.add_argument('--cai-chat', action='store_true', help='DEPRECATED: use --chat instead.')
 parser.add_argument('--character', type=str, help='The name of the character to load in chat mode by default.')
-parser.add_argument('--model', type=str, default='grubgaguuga', help='Name of the model to load by default.')
+parser.add_argument('--model', type=str, default='deepblue', help='Name of the model to load by default.')
 parser.add_argument('--lora', type=str, nargs="+", help='The list of LoRAs to load. If you want to load more than one LoRA, write the names separated by spaces.')
 parser.add_argument("--model-dir", type=str, default='models/', help="Path to directory with all the models")
 parser.add_argument("--lora-dir", type=str, default='loras/', help="Path to directory with all the loras")
