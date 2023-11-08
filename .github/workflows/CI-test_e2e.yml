@@ -11,10 +11,12 @@ jobs:
     steps:
       - name: Clear Space
         run: |
+          df -h
           rm -rf /usr/share/dotnet
           rm -rf /opt/ghc
-          rm -rf "/usr/local/share/boost"
+          rm -rf /usr/local/share/boost
           rm -rf "$AGENT_TOOLSDIRECTORY"
+          df -h
 
       - name: Clean up Docker
         run: |
