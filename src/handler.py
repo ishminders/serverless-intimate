@@ -15,61 +15,6 @@ from modules import chat, shared, training, ui
 import logging
 import sys
 
-def load_model_config():
-    show_progress=False
-    shared.args.no_stream
-    available_models = get_available_models()
-
-    # Model defined through --model
-    if shared.args.model is not None:
-        shared.model_name = shared.args.model
-
-    # Only one model is available
-    elif len(available_models) == 1:
-        shared.model_name = available_models[0]
-
-    # Select the model from a command-line menu
-    elif shared.args.model_menu:
-        if len(available_models) == 0:
-            logging.error('No models are available! Please download at least one.')
-            sys.exit(0)
-        else:
-            print('The following models are available:\n')
-            for i, model in enumerate(available_models):
-                print(f'{i+1}. {model}')
-
-            print(f'\nWhich one do you want to load? 1-{len(available_models)}\n')
-            i = int(input()) - 1
-            print()
-
-        shared.model_name = available_models[i]
-
-    # If any model has been selected, load it
-    if shared.model_name != 'None':
-        model_settings = get_model_specific_settings(shared.model_name)
-        shared.settings.update(model_settings)  # hijacking the interface defaults
-        update_model_parameters(model_settings, initial=True)  # hijacking the command-line arguments
-
-        # Load the model
-        shared.model, shared.tokenizer = load_model(shared.model_name)
-        if shared.args.lora:
-            add_lora_to_model(shared.args.lora)
-
-    # Force a character to be loaded
-    if shared.is_chat():
-        shared.persistent_interface_state.update({
-            'mode': shared.settings['mode'],
-            'character_menu': shared.args.character or shared.settings['character'],
-            'instruction_template': shared.settings['instruction_template']
-        })
-    
-    return {"message": "Intimate Server Initialized"}
-
-# If your handler runs inference on a model, load the model here.
-# You will want models to be loaded into memory before starting serverless
-# so that you can reuse the model across invocations.
-load_model_config()
-
 def update_model_parameters(state, initial=False):
     elements = ui.list_model_elements()  # the names of the parameters
     gpu_memories = []
@@ -128,6 +73,61 @@ def get_model_specific_settings(model):
                 model_settings[k] = settings[pat][k]
 
     return model_settings
+
+def load_model_config():
+    show_progress=False
+    shared.args.no_stream
+    available_models = get_available_models()
+
+    # Model defined through --model
+    if shared.args.model is not None:
+        shared.model_name = shared.args.model
+
+    # Only one model is available
+    elif len(available_models) == 1:
+        shared.model_name = available_models[0]
+
+    # Select the model from a command-line menu
+    elif shared.args.model_menu:
+        if len(available_models) == 0:
+            logging.error('No models are available! Please download at least one.')
+            sys.exit(0)
+        else:
+            print('The following models are available:\n')
+            for i, model in enumerate(available_models):
+                print(f'{i+1}. {model}')
+
+            print(f'\nWhich one do you want to load? 1-{len(available_models)}\n')
+            i = int(input()) - 1
+            print()
+
+        shared.model_name = available_models[i]
+
+    # If any model has been selected, load it
+    if shared.model_name != 'None':
+        model_settings = get_model_specific_settings(shared.model_name)
+        shared.settings.update(model_settings)  # hijacking the interface defaults
+        update_model_parameters(model_settings, initial=True)  # hijacking the command-line arguments
+
+        # Load the model
+        shared.model, shared.tokenizer = load_model(shared.model_name)
+        if shared.args.lora:
+            add_lora_to_model(shared.args.lora)
+
+    # Force a character to be loaded
+    if shared.is_chat():
+        shared.persistent_interface_state.update({
+            'mode': shared.settings['mode'],
+            'character_menu': shared.args.character or shared.settings['character'],
+            'instruction_template': shared.settings['instruction_template']
+        })
+    
+    return {"message": "Intimate Server Initialized"}
+
+# If your handler runs inference on a model, load the model here.
+# You will want models to be loaded into memory before starting serverless
+# so that you can reuse the model across invocations.
+load_model_config()
 
 def handler(event):
     request_payload = event['input']  # mimic the incoming request data
