@@ -18,12 +18,12 @@ RUN python3.11 -m pip install --upgrade pip && \
 ADD src .
 
 # Install git-lfs
-RUN apt-get update && \
-    apt-get install -y git-lfs && \
-    git lfs install && \
-    rm -rf /var/lib/apt/lists/* 
+# RUN apt-get update && \
+#     apt-get install -y git-lfs && \
+#     git lfs install && \
+#     rm -rf /var/lib/apt/lists/* 
 
 # Clone Hugging Face repository with Git LFS
-RUN git clone https://huggingface.co/fajw942ghh13/deepblue /src/models/deepblue
+# RUN git clone https://huggingface.co/fajw942ghh13/deepblue /src/models/deepblue
 
 CMD python3.11 -u /handler.py
