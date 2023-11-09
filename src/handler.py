@@ -67,6 +67,8 @@ def load_model_config():
 
 # If your handler runs inference on a model, load the model here.
 # You will want models to be loaded into memory before starting serverless
+# so that you can reuse the model across invocations.
+load_model_config()
 
 def update_model_parameters(state, initial=False):
     elements = ui.list_model_elements()  # the names of the parameters
@@ -131,11 +133,8 @@ def handler(event):
     request_payload = event['input']  # mimic the incoming request data
 
     # You can add your logic to process the event similar to the `chat_with_chatbot` endpoint
-    user_input = request_payload.get('prompt', '')
-    state = request_payload.get('parameters', {})
-
-    # Update the model parameters based on state as before
-    update_model_parameters(state, initial=False)  # Ensure this is adapted if necessary
+    user_input = request_payload.get('user_input', '')
+    state = request_payload.get('state', {})
 
     # Perform your model's chat operation
     default_params = build_chat_parameters({'user_input': user_input})
