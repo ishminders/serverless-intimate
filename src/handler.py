@@ -131,21 +131,22 @@ load_model_config()
 
 def handler(event):
     request_payload = event['input']  # mimic the incoming request data
-
-    # You can add your logic to process the event similar to the `chat_with_chatbot` endpoint
     user_input = request_payload.get('user_input', '')
     state = request_payload.get('state', {})
 
-    # Perform your model's chat operation
     default_params = build_chat_parameters({'user_input': user_input})
     for key, value in default_params.items():
         if key not in state:
             state[key] = value
 
     answer = chatbot_wrapper(user_input, state)
-    visible_reply = answer[-1][1] if answer else "No reply generated"
+
+    for visible_history in answer:
+        pass  # Do nothing, just keep iterating
+
+    # Extract the message from the last item of the visible_history
+    visible_reply = visible_history[-1][1]
 
     return {"response": visible_reply}
-
 
 runpod.serverless.start({"handler": handler})
